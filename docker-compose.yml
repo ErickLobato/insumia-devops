@@ -1,0 +1,30 @@
+services:
+  insumia-api:
+    build: .
+    container_name: insumia-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - MONGO_URI=mongodb://insumia-db:27017/insumia
+    depends_on:
+      - insumia-db
+    networks:
+      - insumia-network
+
+  insumia-db:
+    image: mongo:6.0
+    container_name: insumia-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - insumia-network
+
+volumes:
+  mongo_data:
+
+networks:
+  insumia-network:
+    driver: bridge
